@@ -96,45 +96,44 @@ function Sidebar({
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
-                      <a
-                        href="#0"
-                        className={`block text-gray\-800 dark:text-gray-100 truncate transition duration-150 ${
-                          pathname === "/" || pathname.includes("dashboard") ? "" : "hover:text-gray-900 dark:hover:text-white"
-                        }`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleClick();
-                          setSidebarExpanded(true);
-                        }}
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center">
-                            
-                            <div className={`rounded-[8px] p-1  ${pathname === "/" || pathname.includes("dashboard") ? 'bg-sherwood-950' : ''}`}>
-                              <i className={`fa-solid fa-house shrink-0 ${pathname === "/" || pathname.includes("dashboard") ? 'text-white' : 'text-sherwood-950/60'}`} width="16" height="16" viewBox="0 0 16 16"></i>
-                            </div>                          
-                            <span className={`text-[16px] font-semibold ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 ${pathname === "/" || pathname.includes("dashboard") ? 'text-sherwood-950' : 'text-sherwood-950/60'}`}>
-                              Dashboard
-                            </span>
+                    <NavLink
+                      end
+                      to="/"
+                      className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
+                        pathname === "/" || pathname.includes("dashboard") ? "" : "hover:text-gray-900 dark:hover:text-white"
+                      }`}
+                      onClick={(e) => {
+                        handleClick();
+                        setSidebarExpanded(true);
+                      }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <div className={`rounded-[8px] p-1 px-2 ${pathname === "/" || pathname.includes("dashboard") ? 'bg-sherwood-950' : ''}`}>
+                            <i className={`fa-solid fa-house shrink-0 ${pathname === "/" || pathname.includes("dashboard") ? 'text-white' : 'text-sherwood-950/60'}`}></i>
                           </div>
+                          <span className={`text-[16px] font-semibold ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 ${pathname === "/" || pathname.includes("dashboard") ? 'text-sherwood-950' : 'text-sherwood-950/60'}`}>
+                            Dashboard
+                          </span>
                         </div>
-                      </a>
+                      </div>
+                    </NavLink>
                     </React.Fragment>
                   );
                 }}
               </SidebarLinkGroup>
-              {/* Calendar */}
-              <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-0.5 last:mb-0 bg-linear-to-r ${pathname.includes("master-data") && 'bg-white-wash'}`}>
+              {/* master-data */}
+              <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-2 last:mb-0 bg-linear-to-r ${pathname.includes("master-data") && 'bg-white-wash'}`}>
                 <NavLink
                   end
-                  to="https://cruip.com/mosaic/"
+                  to="/master-data"
                   className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
-                    pathname.includes("calendar") ? "" : "hover:text-gray-900 dark:hover:text-white"
+                    pathname.includes("master-data") ? "" : "hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                        <div className={`rounded-[8px] p-1  ${pathname.includes("master-data") ? 'bg-sherwood-950' : ''}`}>
+                        <div className={`rounded-[8px] p-1 px-2 ${pathname.includes("master-data") ? 'bg-sherwood-950' : ''}`}>
                           <i className={`fa-solid fa-folder-open shrink-0 ${pathname.includes("master-data") ? 'text-white' : 'text-sherwood-950/60'}`} width="16" height="16" viewBox="0 0 16 16"></i>
                         </div>                          
                         <span className={`text-[16px] font-semibold ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 ${pathname.includes("master-data") ? 'text-sherwood-950' : 'text-sherwood-950/60'}`}>
@@ -145,18 +144,18 @@ function Sidebar({
 
                 </NavLink>
               </li>
-              {/* Calendar */}
-              <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-0.5 last:mb-0 bg-linear-to-r ${pathname.includes("transaction") && 'bg-white-wash'}`}>
+              {/* transaction */}
+              <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-2 last:mb-0 bg-linear-to-r ${pathname.includes("transaction") && 'bg-white-wash'}`}>
                 <NavLink
                   end
-                  to="https://cruip.com/mosaic/"
+                  to="/transaction"
                   className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
-                    pathname.includes("calendar") ? "" : "hover:text-gray-900 dark:hover:text-white"
+                    pathname.includes("transaction") ? "" : "hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                        <div className={`rounded-[8px] p-1  ${pathname.includes("transaction") ? 'bg-sherwood-950' : ''}`}>
+                        <div className={`rounded-[8px] p-1 px-2 ${pathname.includes("transaction") ? 'bg-sherwood-950' : ''}`}>
                           <i className={`fa-solid fa-money-bill-transfer shrink-0 ${pathname.includes("transaction") ? 'text-white' : 'text-sherwood-950/60'}`} width="16" height="16" viewBox="0 0 16 16"></i>
                         </div>                          
                         <span className={`text-[16px] font-semibold ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 ${pathname.includes("transaction") ? 'text-sherwood-950' : 'text-sherwood-950/60'}`}>
@@ -167,18 +166,18 @@ function Sidebar({
 
                 </NavLink>
               </li>
-              {/* Campaigns */}
-              <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-0.5 last:mb-0 bg-linear-to-r ${pathname.includes("report") && 'bg-white-wash'}`}>
+              {/* report */}
+              <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-2 last:mb-0 bg-linear-to-r ${pathname.includes("report") && 'bg-white-wash'}`}>
                 <NavLink
-                  end
-                  to="https://cruip.com/mosaic/"
+                  end 
+                  to="/report"
                   className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${
-                    pathname.includes("campaigns") ? "" : "hover:text-gray-900 dark:hover:text-white"
+                    pathname.includes("report") ? "" : "hover:text-gray-900 dark:hover:text-white"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                        <div className={`rounded-[8px] p-1  ${pathname.includes("report") ? 'bg-sherwood-950' : ''}`}>
+                        <div className={`rounded-[8px] p-1 px-2 ${pathname.includes("report") ? 'bg-sherwood-950' : ''}`}>
                           <i className={`fa-solid fa-file-lines shrink-0 ${pathname.includes("report") ? 'text-white' : 'text-sherwood-950/60'}`} width="16" height="16" viewBox="0 0 16 16"></i>
                         </div>                          
                         <span className={`text-[16px] font-semibold ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 ${pathname.includes("report") ? 'text-sherwood-950' : 'text-sherwood-950/60'}`}>
