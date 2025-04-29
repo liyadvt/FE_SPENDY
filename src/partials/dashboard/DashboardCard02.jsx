@@ -1,111 +1,90 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import LineChart from '../../charts/LineChart01';
-import { chartAreaGradient } from '../../charts/ChartjsConfig';
-import EditMenu from '../../components/DropdownEditMenu';
-
-// Import utilities
-import { adjustColorOpacity, getCssVariable } from '../../utils/Utils';
+import React, { useEffect, useState } from 'react';
+import outcomeImg from '../../images/outcome.svg';
 
 function DashboardCard02() {
+  const [totalOutcome, setTotalOutcome] = useState(0);
+  const [percentage, setPercentage] = useState(0);
 
-  const chartData = {
-    labels: [
-      '12-01-2022', '01-01-2023', '02-01-2023',
-      '03-01-2023', '04-01-2023', '05-01-2023',
-      '06-01-2023', '07-01-2023', '08-01-2023',
-      '09-01-2023', '10-01-2023', '11-01-2023',
-      '12-01-2023', '01-01-2024', '02-01-2024',
-      '03-01-2024', '04-01-2024', '05-01-2024',
-      '06-01-2024', '07-01-2024', '08-01-2024',
-      '09-01-2024', '10-01-2024', '11-01-2024',
-      '12-01-2024', '01-01-2025',
-    ],
-    datasets: [
-      // Indigo line
-      {
-        data: [
-          622, 622, 426, 471, 365, 365, 238,
-          324, 288, 206, 324, 324, 500, 409,
-          409, 273, 232, 273, 500, 570, 767,
-          808, 685, 767, 685, 685,
-        ],
-        fill: true,
-        backgroundColor: function(context) {
-          const chart = context.chart;
-          const {ctx, chartArea} = chart;
-          return chartAreaGradient(ctx, chartArea, [
-            { stop: 0, color: adjustColorOpacity(getCssVariable('--color-violet-500'), 0) },
-            { stop: 1, color: adjustColorOpacity(getCssVariable('--color-violet-500'), 0.2) }
-          ]);
-        },       
-        borderColor: getCssVariable('--color-violet-500'),
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 3,
-        pointBackgroundColor: getCssVariable('--color-violet-500'),
-        pointHoverBackgroundColor: getCssVariable('--color-violet-500'),
-        pointBorderWidth: 0,
-        pointHoverBorderWidth: 0,          
-        clip: 20,
-        tension: 0.2,
-      },
-      // Gray line
-      {
-        data: [
-          732, 610, 610, 504, 504, 504, 349,
-          349, 504, 342, 504, 610, 391, 192,
-          154, 273, 191, 191, 126, 263, 349,
-          252, 423, 622, 470, 532,
-        ],
-        borderColor: adjustColorOpacity(getCssVariable('--color-gray-500'), 0.25),
-        borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 3,
-        pointBackgroundColor: adjustColorOpacity(getCssVariable('--color-gray-500'), 0.25),
-        pointHoverBackgroundColor: adjustColorOpacity(getCssVariable('--color-gray-500'), 0.25),
-        pointBorderWidth: 0,
-        pointHoverBorderWidth: 0,
-        clip: 20,
-        tension: 0.2,
-      },
-    ],
+  const formatRupiah = (angka) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    }).format(angka);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch('http://localhost:8000/api/reports');
+        const data = await res.json();
+
+        let reportData = data.data;
+        if (reportData.data) {
+          reportData = reportData.data;
+        }
+
+        if (!Array.isArray(reportData)) {
+          throw new Error('Data outcome bukan array');
+        }
+
+        const today = new Date();
+        const daysAgo = (days) => new Date(today.getTime() - days * 24 * 60 * 60 * 1000);
+
+        const recent30Days = reportData.filter((item) => {
+          const createdAt = new Date(item.created_at);
+          return createdAt >= daysAgo(30) && createdAt <= today;
+        });
+
+        const previous30Days = reportData.filter((item) => {
+          const createdAt = new Date(item.created_at);
+          return createdAt >= daysAgo(60) && createdAt < daysAgo(30);
+        });
+
+        const totalRecent = recent30Days.reduce((sum, item) => sum + (parseFloat(item.credit) || 0), 0);
+        const totalPrevious = previous30Days.reduce((sum, item) => sum + (parseFloat(item.credit) || 0), 0);
+
+        setTotalOutcome(totalRecent);
+
+        const percentChange =
+          totalPrevious === 0
+            ? totalRecent > 0
+              ? 100
+              : 0
+            : ((totalRecent - totalPrevious) / totalPrevious) * 100;
+
+        setPercentage(percentChange.toFixed(1));
+      } catch (error) {
+        console.error('Gagal ambil data outcome:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
-    <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white dark:bg-gray-800 shadow-xs rounded-xl">
-      <div className="px-5 pt-5">
-        <header className="flex justify-between items-start mb-2">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-2">Acme Advanced</h2>
-          {/* Menu button */}
-          <EditMenu align="right" className="relative inline-flex">
-            <li>
-              <Link className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 flex py-1 px-3" to="#0">
-                Option 1
-              </Link>
-            </li>
-            <li>
-              <Link className="font-medium text-sm text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-gray-200 flex py-1 px-3" to="#0">
-                Option 2
-              </Link>
-            </li>
-            <li>
-              <Link className="font-medium text-sm text-red-500 hover:text-red-600 flex py-1 px-3" to="#0">
-                Remove
-              </Link>
-            </li>
-          </EditMenu>
-        </header>
-        <div className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-1">Sales</div>
-        <div className="flex items-start">
-          <div className="text-3xl font-bold text-gray-800 dark:text-gray-100 mr-2">$17,489</div>
-          <div className="text-sm font-medium text-red-700 px-1.5 bg-red-500/20 rounded-full">-14%</div>
+    <div className="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white shadow-xs rounded-xl p-5">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="font-semibold text-sherwood-950 text-xl">Outcome</h1>
+        <div className="inline-flex bg-red-50 p-2 rounded-[12px]">
+          <img src={outcomeImg} alt="Outcome" className="w-6 h-6" />
         </div>
       </div>
-      {/* Chart built with Chart.js 3 */}
-      <div className="grow max-sm:max-h-[128px] max-h-[128px]">
-        {/* Change the height attribute to adjust the chart height */}
-        <LineChart data={chartData} width={389} height={128} />
+
+      {/* Value */}
+      <div className="flex justify-center mb-6 mt-3">
+        <h3 className="text-3xl font-bold text-sherwood-950">
+          - {formatRupiah(totalOutcome)}
+        </h3>
+      </div>
+
+      {/* Percentage */}
+      <div className="flex justify-center mt-6">
+        <div className="text-base font-semibold text-red-600 bg-red-50 px-12 py-2 rounded-xl">
+          {percentage >= 0 ? '+' : ''}
+          {percentage} %
+        </div>
       </div>
     </div>
   );

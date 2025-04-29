@@ -5,6 +5,12 @@ import './css/style.css';
 import './charts/ChartjsConfig';
 
 import AppRoutes from './routes'; // Import routes dari file terpisah
+// Import pages
+import Dashboard from './pages/Dashboard';
+import Report from './pages/Report';
+
+
+function App() {
 
 function ScrollToTop() {
   const location = useLocation();
@@ -23,6 +29,12 @@ function AppWrapper() {
     <>
       <ScrollToTop />
       <AppRoutes />
+      <Routes>
+        <Route exact path="/" element={<Dashboard />} />
+        <Route exact path="/report" element={<Report />} />
+
+      </Routes>
+
     </>
   );
 }

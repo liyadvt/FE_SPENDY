@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Transition from '../utils/Transition';
 
-import UserAvatar from '../images/user-avatar-32.png';
+import UserAvatar from '../images/user-36-05.jpg';
 
 function DropdownProfile({
   align
@@ -79,15 +79,6 @@ function DropdownProfile({
             <div className="text-xs font-montserrat text-[#10141C]/60">Administrator</div>
           </div>
           <ul>
-            {/* <li>
-              <Link
-                className="font-medium text-sm text-sherwood-700 hover:text-sherwood-800 font-montserrat flex items-center py-1 px-3"
-                to="/settings"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                Settings
-              </Link>
-            </li> */}
             <li>
               <Link
                 className="font-medium text-sm text-sherwood-700 hover:text-sherwood-800 font-montserrat flex items-center py-1 px-3"
