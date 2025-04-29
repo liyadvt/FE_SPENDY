@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
-import logo from "../images/Logo.svg"; 
-
-
+import logo from "../images/Logo.svg";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 
 function Sidebar({
@@ -53,9 +51,7 @@ function Sidebar({
     <div className="min-w-fit">
       {/* Sidebar backdrop (mobile only) */}
       <div
-        className={`fixed inset-0 bg-gray-900/30 z-40 lg:hidden lg:z-auto transition-opacity duration-200 ${
-          sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-        }`}
+        className={`fixed inset-0 bg-gray-900/30 z-40 lg:hidden lg:z-auto transition-opacity duration-200 ${sidebarOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         aria-hidden="true"
       ></div>
 
@@ -92,6 +88,22 @@ function Sidebar({
           <div>
             <ul className="mt-3">
               {/* Dashboard */}
+              {/* Dashboard */}
+              <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-0.5 last:mb-0 ${pathname === '/' ? 'bg-white-wash' : ''}`}>
+                <NavLink
+                  end
+                  to="/"
+                  className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${pathname === '/' ? "" : "hover:text-gray-900 dark:hover:text-white"}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className={`rounded-[8px] p-1 ${pathname === '/' ? 'bg-sherwood-950' : ''}`}>
+                        <i className={`fa-solid fa-house shrink-0 ${pathname === '/' ? 'text-white' : 'text-sherwood-950/60'}`} width="16" height="16" viewBox="0 0 16 16"></i>
+                      </div>
+                      <span className={`text-[16px] font-semibold ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 ${pathname === '/' ? 'text-sherwood-950' : 'text-sherwood-950/60'}`}>
+                        Dashboard
+                      </span>
+=======
               <SidebarLinkGroup activecondition={pathname === "/" || pathname.includes("dashboard")}>
                 {(handleClick, open) => {
                   return (
@@ -141,9 +153,43 @@ function Sidebar({
                         </span>
                     </div>
                   </div>
-
                 </NavLink>
               </li>
+
+              {/* Master Data */}
+              <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-0.5 last:mb-0 bg-linear-to-r ${pathname.includes("master-data") && 'bg-white-wash'}`}>
+                <NavLink
+                  end
+                  to="/master-data"
+                  className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${pathname.includes("master-data") ? "" : "hover:text-gray-900 dark:hover:text-white"}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className={`rounded-[8px] p-1 ${pathname.includes("master-data") ? 'bg-sherwood-950' : ''}`}>
+                        <i className={`fa-solid fa-folder-open shrink-0 ${pathname.includes("master-data") ? 'text-white' : 'text-sherwood-950/60'}`} width="16" height="16" viewBox="0 0 16 16"></i>
+                      </div>
+                      <span className={`text-[16px] font-semibold ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 ${pathname.includes("master-data") ? 'text-sherwood-950' : 'text-sherwood-950/60'}`}>
+                        Master Data
+                      </span>
+                    </div>
+                  </div>
+                </NavLink>
+              </li>
+              {/* Transaction */}
+              <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-0.5 last:mb-0 bg-linear-to-r ${pathname.includes("transaction") && 'bg-white-wash'}`}>
+                <NavLink
+                  end
+                  to="/transaction"
+                  className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${pathname.includes("transaction") ? "" : "hover:text-gray-900 dark:hover:text-white"}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className={`rounded-[8px] p-1 ${pathname.includes("transaction") ? 'bg-sherwood-950' : ''}`}>
+                        <i className={`fa-solid fa-money-bill-transfer shrink-0 ${pathname.includes("transaction") ? 'text-white' : 'text-sherwood-950/60'}`} width="16" height="16" viewBox="0 0 16 16"></i>
+                      </div>
+                      <span className={`text-[16px] font-semibold ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 ${pathname.includes("transaction") ? 'text-sherwood-950' : 'text-sherwood-950/60'}`}>
+                        Transaction
+                      </span>
               {/* transaction */}
               <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-2 last:mb-0 bg-linear-to-r ${pathname.includes("transaction") && 'bg-white-wash'}`}>
                 <NavLink
@@ -163,9 +209,23 @@ function Sidebar({
                         </span>
                     </div>
                   </div>
-
                 </NavLink>
               </li>
+              {/* Report */}
+              <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-0.5 last:mb-0 bg-linear-to-r ${pathname.includes("report") && 'bg-white-wash'}`}>
+                <NavLink
+                  end
+                  to="/report"
+                  className={`block text-gray-800 dark:text-gray-100 truncate transition duration-150 ${pathname.includes("report") ? "" : "hover:text-gray-900 dark:hover:text-white"}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className={`rounded-[8px] p-1 ${pathname.includes("report") ? 'bg-sherwood-950' : ''}`}>
+                        <i className={`fa-solid fa-file-lines shrink-0 ${pathname.includes("report") ? 'text-white' : 'text-sherwood-950/60'}`} width="16" height="16" viewBox="0 0 16 16"></i>
+                      </div>
+                      <span className={`text-[16px] font-semibold ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 ${pathname.includes("report") ? 'text-sherwood-950' : 'text-sherwood-950/60'}`}>
+                        Report
+                      </span
               {/* report */}
               <li className={`pl-4 pr-3 py-[14px] rounded-r-[28px] mb-2 last:mb-0 bg-linear-to-r ${pathname.includes("report") && 'bg-white-wash'}`}>
                 <NavLink
@@ -196,9 +256,7 @@ function Sidebar({
           <div className="w-12 pl-4 pr-3 py-[14px]">
             <button className="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400" onClick={() => setSidebarExpanded(!sidebarExpanded)}>
               <span className="sr-only">Expand / collapse sidebar</span>
-              <svg className="shrink-0 fill-current text-gray-400 dark:text-gray-500 sidebar-expanded:rotate-180" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                <path d="M15 16a1 1 0 0 1-1-1V1a1 1 0 1 1 2 0v14a1 1 0 0 1-1 1ZM8.586 7H1a1 1 0 1 0 0 2h7.586l-2.793 2.793a1 1 0 1 0 1.414 1.414l4.5-4.5A.997.997 0 0 0 12 8.01M11.924 7.617a.997.997 0 0 0-.217-.324l-4.5-4.5a1 1 0 0 0-1.414 1.414L8.586 7M12 7.99a.996.996 0 0 0-.076-.373Z" />
-              </svg>
+              <svg className="shrink-0 fill-current text-gray-400 dark:text-gray-500 sidebar-expanded:rotate-180" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M4.293 5.293a1 1 0 0 1 1.414 0L8 7.586l2.293-2.293a1 1 0 1 1 1.414 1.414l-3 3a1 1 0 0 1-1.414 0l-3-3a1 1 0 0 1 0-1.414z"></path></svg>
             </button>
           </div>
         </div>
