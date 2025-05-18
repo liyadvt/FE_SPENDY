@@ -5,8 +5,18 @@ import Header from '../partials/Header';
 import DashboardCard04 from '../partials/dashboard/DashboardCard04';
 
 function Dashboard() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const today = new Date();
+  const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+  let formattedDate = today.toLocaleDateString('en-US', options);
+
+  if (formattedDate.includes(', ')) {
+    const parts = formattedDate.split(', ');
+    if (parts.length === 3) {
+      formattedDate = `${parts[0]}, ${parts[1]} ${parts[2]}`;
+    }
+  }
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -24,7 +34,10 @@ function Dashboard() {
             <div className="sm:flex sm:justify-between sm:items-center mb-8">
               {/* Left: Title */}
               <div className="mb-4 sm:mb-0">
-                <h1 className="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Report</h1>
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-gray-100">
+                  Report
+                </h1>
+                <p className="text-sm text-gray-600 dark:text-gray-300">{formattedDate}</p>
               </div>
             </div>
 

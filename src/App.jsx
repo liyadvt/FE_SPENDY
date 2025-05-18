@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import './css/style.css';
 import './charts/ChartjsConfig';
 
-import AppRoutes from './routes'; // Import routes dari file terpisah
 // Import pages
 import Dashboard from './pages/Dashboard';
 import Report from './pages/Report';
-
-
-function App() {
+import MasterData from './pages/MasterData';
+import Login from './pages/Login';
+import Transaction from './pages/Transaction';
 
 function ScrollToTop() {
   const location = useLocation();
@@ -28,11 +27,12 @@ function AppWrapper() {
   return (
     <>
       <ScrollToTop />
-      <AppRoutes />
       <Routes>
-        <Route exact path="/" element={<Dashboard />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/dashboard" element={<Dashboard />} />
+        <Route exact path="/master-data" element={<MasterData />} />
+        <Route exact path="/transaction" element={<Transaction />} />
         <Route exact path="/report" element={<Report />} />
-
       </Routes>
 
     </>
@@ -44,3 +44,4 @@ export default function App() {
     <AppWrapper />
   );
 }
+
