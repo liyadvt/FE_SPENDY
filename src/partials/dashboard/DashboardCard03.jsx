@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import balanceImg from '../../images/balance.svg'; // konsisten nama
+import axiosInstance from '../axiosInstance';
 
 function DashboardCard03() {
   const [balance, setBalance] = useState(0);
@@ -15,8 +16,8 @@ function DashboardCard03() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://localhost:8000/api/reports');
-        const data = await res.json();
+        const res = await axiosInstance.get('/reports');
+        const data = res.data;
 
         let reportData = data.data;
         if (reportData.data) {

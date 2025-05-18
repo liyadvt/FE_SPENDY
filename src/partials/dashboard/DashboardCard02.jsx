@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import outcomeImg from '../../images/outcome.svg';
+import axiosInstance from '../axiosInstance';
 
 function DashboardCard02() {
-  const [totalOutcome, setTotalOutcome] = useState(0);
-  const [percentage, setPercentage] = useState(0);
-
   const formatRupiah = (angka) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
@@ -13,49 +11,49 @@ function DashboardCard02() {
     }).format(angka);
   };
 
+  const [totalExpense, setTotalExpense] = useState(0);
+  const [percentageExpense, setPercentageExpense] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('http://localhost:8000/api/reports');
-        const data = await res.json();
-
-        let reportData = data.data;
+        const res = await axiosInstance.get('/reports');
+        let reportData = res.data.data;
         if (reportData.data) {
           reportData = reportData.data;
         }
 
         if (!Array.isArray(reportData)) {
-          throw new Error('Data outcome bukan array');
+          throw new Error('Data yang diterima bukan array');
         }
 
         const today = new Date();
         const daysAgo = (days) => new Date(today.getTime() - days * 24 * 60 * 60 * 1000);
 
-        const recent30Days = reportData.filter((item) => {
+        const startDate = daysAgo(30);
+
+        const last30DaysTransactions = reportData.filter(item => {
           const createdAt = new Date(item.created_at);
-          return createdAt >= daysAgo(30) && createdAt <= today;
+          return createdAt >= startDate && createdAt <= today;
         });
 
-        const previous30Days = reportData.filter((item) => {
-          const createdAt = new Date(item.created_at);
-          return createdAt >= daysAgo(60) && createdAt < daysAgo(30);
-        });
+        const totalIncome = last30DaysTransactions.reduce((sum, item) => {
+          return sum + (item.debit ? parseFloat(item.debit) : 0);
+        }, 0);
 
-        const totalRecent = recent30Days.reduce((sum, item) => sum + (parseFloat(item.credit) || 0), 0);
-        const totalPrevious = previous30Days.reduce((sum, item) => sum + (parseFloat(item.credit) || 0), 0);
+        const totalExpense = last30DaysTransactions.reduce((sum, item) => {
+          return sum + (item.credit ? parseFloat(item.credit) : 0);
+        }, 0);
 
-        setTotalOutcome(totalRecent);
+        const totalTransaction = totalIncome + totalExpense;
 
-        const percentChange =
-          totalPrevious === 0
-            ? totalRecent > 0
-              ? 100
-              : 0
-            : ((totalRecent - totalPrevious) / totalPrevious) * 100;
+        const percentExpense = totalTransaction === 0 ? 0 : (totalExpense / totalTransaction) * 100;
 
-        setPercentage(percentChange.toFixed(1));
+        setTotalExpense(totalExpense);
+        setPercentageExpense(percentExpense.toFixed(1)); 
+
       } catch (error) {
-        console.error('Gagal ambil data outcome:', error);
+        console.error('Gagal ambil data transaksi:', error);
       }
     };
 
@@ -75,15 +73,15 @@ function DashboardCard02() {
       {/* Value */}
       <div className="flex justify-center mb-6 mt-3">
         <h3 className="text-3xl font-bold text-sherwood-950">
-          - {formatRupiah(totalOutcome)}
+          - {formatRupiah(totalExpense)}
         </h3>
       </div>
 
       {/* Percentage */}
       <div className="flex justify-center mt-6">
         <div className="text-base font-semibold text-red-600 bg-red-50 px-12 py-2 rounded-xl">
-          {percentage >= 0 ? '+' : ''}
-          {percentage} %
+          {percentageExpense >= 0 ? '+' : ''}
+          {percentageExpense} %
         </div>
       </div>
     </div>

@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import Report from '../../images/report.svg';
+import axiosInstance from '../axiosInstance';
 
 function DashboardCard04() {
     const [report, setReport] = useState([]);
     const location = useLocation();
-    
+
     const formatRupiah = (angka) => {
         return new Intl.NumberFormat('id-ID', {
             style: 'currency',
@@ -16,18 +17,25 @@ function DashboardCard04() {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:8000/api/reports', {
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        const fetchReports = async () => {
+            try {
+                const res = await axiosInstance.get('/reports');
+                const data = res.data;
+
+                let reportData = data.data;
+                if (reportData.data) {
+                    reportData = reportData.data;
+                }
+
+                setReport(reportData || []);
+            } catch (err) {
+                console.error('Error fetching reports:', err);
             }
-        })
-        .then(res => {
-            setReport(res.data.data || []);
-        })
-        .catch(err => {
-            console.log(err);
-        });
+        };
+
+        fetchReports();
     }, []);
+
 
     // Kalau di dashboard, ambil 5 terakhir
     const displayedReports = location.pathname === '/'
@@ -62,7 +70,14 @@ function DashboardCard04() {
                             </thead>
                             <tbody>
                                 {displayedReports.map((item, index) => (
-                                    <tr key={index}>
+                                    <tr
+                                        key={index}
+                                        className={
+                                            index % 2 === 0
+                                                ? "bg-[#d2f7e5]"
+                                                : "bg-white hover:bg-gray-100"
+                                        }
+                                    >
                                         <td className="px-4 py-2 border-b border">{index + 1}</td>
                                         <td className="px-4 py-2 border-b border">{item.note}</td>
                                         <td className="px-4 py-2 border-b border">{new Date(item.created_at).toLocaleDateString()}</td>
@@ -77,15 +92,15 @@ function DashboardCard04() {
 
                         {location.pathname === '/' && (
                             <div className="text-right">
-                                <Link 
-                                    to="/report" 
+                                <Link
+                                    to="/report"
                                     className="inline-block hover:text-sherwood-800 text-gray-400 font-small py-2 px-4 rounded-lg transition duration-150"
                                 >
                                     <p>See More <i className="fa-solid fa-chevron-right"></i></p>
                                 </Link>
                             </div>
                         )}
-                        
+
                     </div>
                 </div>
             </div>

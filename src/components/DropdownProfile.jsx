@@ -1,19 +1,38 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Transition from '../utils/Transition';
+import axiosInstance from '../partials/axiosInstance';
 
-import UserAvatar from '../images/user-36-05.jpg';
-
-function DropdownProfile({
-  align
-}) {
-
+function DropdownProfile({ align }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
   const trigger = useRef(null);
   const dropdown = useRef(null);
 
-  // close on click outside
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.post('/logout');
+      localStorage.removeItem('token');
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axiosInstance.get('/profile');
+        setUser(response.data);
+      } catch (error) {
+        console.error('Failed to fetch user:', error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  // Close on outside click
   useEffect(() => {
     const clickHandler = ({ target }) => {
       if (!dropdown.current) return;
@@ -24,7 +43,7 @@ function DropdownProfile({
     return () => document.removeEventListener('click', clickHandler);
   });
 
-  // close if the esc key is pressed
+  // Close on Escape key
   useEffect(() => {
     const keyHandler = ({ keyCode }) => {
       if (!dropdownOpen || keyCode !== 27) return;
@@ -43,24 +62,27 @@ function DropdownProfile({
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
       >
-        <div className="flex text-right flex-col ml-2 truncate">
-          <span className="text-sm font-semibold text-sherwood-950 font-montserrat group-hover:text-sherwood-800">
-            Wonwoo
+        <div className="flex flex-col text-right ml-2 truncate">
+          <span className="text-base font-semibold text-sherwood-950 font-montserrat group-hover:text-sherwood-800">
+            {user?.name || 'Loading...'}
           </span>
-          <span className="text-xs text-[#10141C]/60 font-montserrat font-semibold">
-            Wonwoo@gmail.com
-          </span>
-        </div> 
-        <img className="w-8 h-8 rounded-full ml-2" src={UserAvatar} width="32" height="32" alt="User" />
-        <div className="flex items-center truncate">         
-        <svg className="w-3 h-3 ml-2 shrink-0 fill-current text-[#10141C]/60" viewBox="0 0 12 12">
-            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-          </svg>
         </div>
+
+        {/* Icon Font Awesome */}
+        <i className="fa-solid fa-user ml-2 text-2xl text-[#10141C]/60"></i>
+
+        <svg
+          className="w-3 h-3 ml-2 shrink-0 fill-current text-[#10141C]/60"
+          viewBox="0 0 12 12"
+        >
+          <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+        </svg>
       </button>
 
       <Transition
-        className={`origin-top-right z-10 absolute top-full min-w-44 bg-white border-gray-200  py-1.5 rounded-lg shadow-lg overflow-hidden mt-1 ${align === 'right' ? 'right-0' : 'left-0'}`}
+        className={`origin-top-right z-10 absolute top-full min-w-44 bg-white border-gray-200 py-2 rounded-lg shadow-lg overflow-hidden mt-1 ${
+          align === 'right' ? 'right-0' : 'left-0'
+        }`}
         show={dropdownOpen}
         enter="transition ease-out duration-200 transform"
         enterStart="opacity-0 -translate-y-2"
@@ -74,25 +96,28 @@ function DropdownProfile({
           onFocus={() => setDropdownOpen(true)}
           onBlur={() => setDropdownOpen(false)}
         >
-          <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-gray-200 ">
-            <div className="text-sm font-semibold font-montserrat text-sherwood-950 ">Acme Inc.</div>
-            <div className="text-xs font-montserrat text-[#10141C]/60">Administrator</div>
+          <div className="pt-0.5 pb-2 px-3 mb-1 border-b border-gray-200">
+            <div className="text-base font-semibold font-montserrat text-sherwood-950">
+              {user?.name || 'Loading...'}
+            </div>
+            <div className="text-sm font-montserrat text-[#10141C]/60">
+              {user?.email || ''}
+            </div>
           </div>
           <ul>
             <li>
-              <Link
-                className="font-medium text-sm text-sherwood-700 hover:text-sherwood-800 font-montserrat flex items-center py-1 px-3"
-                to="/signin"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
+              <button
+                className="w-full text-left font-medium text-base text-sherwood-700 hover:text-sherwood-800 font-montserrat flex items-center py-2 px-3"
+                onClick={handleLogout}
               >
-                Sign Out
-              </Link>
+                Logout
+              </button>
             </li>
           </ul>
         </div>
       </Transition>
     </div>
-  )
+  );
 }
 
 export default DropdownProfile;
